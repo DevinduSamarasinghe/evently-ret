@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 
 import './globals.css'
+import Header from '@/components/shared/Header'
+import Footer from '@/components/shared/Footer'
 // import { ClerkProvider } from '@clerk/nextjs'
 
 const poppins = Poppins({
@@ -25,7 +27,9 @@ export default function RootLayout({
 }) {
   return (
       <html lang="en">
+        <Header/>
         <body className={poppins.variable}>{children}</body>
+        <Footer/>
       </html>
 
   )
