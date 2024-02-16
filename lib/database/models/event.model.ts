@@ -18,6 +18,7 @@ export interface IEvent extends Document {
     updatedAt: Date;
 }
 
+
 const EventSchema = new Schema({
     title: {
         type: String,

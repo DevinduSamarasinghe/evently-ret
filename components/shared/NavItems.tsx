@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation"
 import React from "react"
 
 const NavItems = ()=>{
+
+    console.log("headerlinks")
     const pathname = usePathname(); 
 
     return (

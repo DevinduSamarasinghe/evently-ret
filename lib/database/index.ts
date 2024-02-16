@@ -1,25 +1,28 @@
 import mongoose from 'mongoose';	
 
-const MONGODB_URI = process.env.MONGOD_URI
+const MONGODB_URI = process.env.MONGODB_URI;
 
-let cached = (global as any).mongoose || {conn: null, promise: null}
+let cached = (global as any).mongoose || { conn: null, promise: null };
 
-export const connectToDatabase = async ()=>{
-    
-    if (cached.conn) return cached.conn;
+export const connectToDatabase = async () => {
+    if (cached.conn) {
+        // If there's already a cached connection, return it
+        return cached.conn;
+    }
 
-    if(!MONGODB_URI) throw new Error("MongoDB URI is Missing")
+    if (!MONGODB_URI) {
+        throw new Error("MongoDB URI is missing");
+    }
 
-    /**
-     * In serverless functions, each invocation creates a new instance of the function. 
-     * To avoid this, we can cache the connection and promise so that the connection is not instantiated again
-     */
+    if (!cached.promise) {
+        // Initialize the connection promise only once
+        cached.promise = mongoose.connect(MONGODB_URI, {
+            dbName: 'evently',
+            bufferCommands: false, // Ensure no commands are buffered
+        });
+    }
 
-    cached.promise - cached.promise || mongoose.connect(MONGODB_URI, {
-        dbName: 'evently',
-        bufferCommands: false,
-    });
-
+    // Await the promise and store the connection in the cache
     cached.conn = await cached.promise;
     return cached.conn;
-}
+};

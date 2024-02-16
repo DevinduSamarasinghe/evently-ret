@@ -71,3 +71,10 @@ export const formatPrice = (price: string)=>{
 }
 
 
+/**
+ * Custom error
+ */
+export const handleError = (error: any)=>{
+  console.error(error);
+  throw new Error(typeof error === 'string' ? error : JSON.stringify(error))
+}
