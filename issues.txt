@@ -1,0 +1,19 @@
+Current Realized Issues 
+
+Authentication is not happening with the thin client -> Devindu 
+Access Control List -> Devindu 
+XSS -> No HttpOnly Cookies
+Proper encryption and decryption protocols -> Devindu 
+No frontend data validation -> Chanux 
+No backend data validation -> Chanux 
+No Logging and Monitoring -> Tentative
+No env variables -> Tentative
+No DevSecOps -> Nashali 
+Self Signed Certificate for SSL -> Tentative
+
+Selenium -> Madusha
+Report -> Everyone 
+
+
+
+
