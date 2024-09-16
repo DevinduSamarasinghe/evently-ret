@@ -68,6 +68,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
     if(type === 'Create') {
       try {
         const newEvent = await createEvent({
+          //@ts-ignore
           event: { ...values, imageUrl: uploadedImageUrl },
           userId,
           path: '/profile'
@@ -88,9 +89,11 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         return;
       }
 
+      
       try {
         const updatedEvent = await updateEvent({
           userId,
+          //@ts-ignore
           event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
           path: `/events/${eventId}`
         })
