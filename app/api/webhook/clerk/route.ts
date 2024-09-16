@@ -86,10 +86,8 @@ export async function POST(req: Request) {
 
   if (eventType === 'user.updated') {
     const { id, first_name, last_name, username, image_url } = evt.data;
-  
     
     console.log('User Updated Event Data:', JSON.stringify(evt, null, 2));
-    
     
     
     const user = {
