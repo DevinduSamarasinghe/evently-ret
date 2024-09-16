@@ -1,0 +1,25 @@
+import EventForm from "@/components/shared/EventForm";
+import {auth} from "@clerk/nextjs";
+
+const CreateEvent = ()=>{
+    const {sessionClaims} = auth();
+
+    /**
+     * Earlier for the userId to be taken from clerk, which is the mongoDB_id, it had to be sent via public metadata of the system
+     */
+
+    const userId = sessionClaims?.userId as string;
+
+    return (
+        <>
+          <section className='bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10'>
+            <h3 className='wrapper h3-bold text-center sm:text-left'>Create Your Event</h3>
+          </section>
+          <div className="wrapper my-8">
+            <EventForm  userId={userId} type="Create" />
+          </div>
+        </>
+      )
+}
+
+export default CreateEvent

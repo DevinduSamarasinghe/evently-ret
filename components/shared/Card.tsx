@@ -14,7 +14,6 @@ type CardProps = {
 const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
 
   const { sessionClaims } = auth();  //This will give us the current sessionClaims, returning the metaData
-  console.log('Session Claims are', sessionClaims?.userId);
   //extracting the mongoDb userId from the sessionClaims
   const userId = sessionClaims?.userId as string;
 

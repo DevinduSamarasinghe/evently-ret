@@ -44,6 +44,8 @@ export const updateUser = async(userId: string, user:UpdateUserParams)=>{
 
         await connectToDatabase();
 
+        console.log("user got updated bruh");
+
         //new: true would return the latest changed updatedInformation
         const updatedUser = await User.findByIdAndUpdate(userId, user, {new:true});
 
