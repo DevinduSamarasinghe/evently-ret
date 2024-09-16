@@ -1,10 +1,12 @@
 // pages/index.tsx
-import { GetServerSideProps } from 'next';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllEvents } from "@/lib/actions/event.actions";
 import Collection from '@/components/shared/Collection';
+import { auth } from '@clerk/nextjs';
+import { getUserById } from '@/lib/actions/user.actions';
+
 
 const Home = async() => {
 
@@ -15,6 +17,14 @@ const Home = async() => {
         page: 1,
         limit: 6
     });
+
+    //Below code is to test if I can fetch the data from the user
+    // const {sessionClaims} = auth();
+    
+    // if(sessionClaims){
+    //     const user = await getUserById(sessionClaims.userId as string);
+    //     console.log("This is the user:",user);
+    // }
 
     return (
         <>
