@@ -51,10 +51,12 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
             {event?.category?.name}
           </p>
         </div>}
-
-        <p className="p-medium-16 p-medium-18 text-grey-500">
-          {formatDateTime(event?.startDateTime).dateTime}
-        </p>
+          {
+            event.startDateTime && 
+            <p className="p-medium-16 p-medium-18 text-grey-500">
+            {formatDateTime(event.startDateTime).dateTime}
+          </p>
+          }
 
         <Link href={`/events/${event?._id}`}>
           <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">{event.title}</p>
