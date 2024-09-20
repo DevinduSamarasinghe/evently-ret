@@ -4,6 +4,7 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
 
     //even if theere is no logged in session, these routes will be accessible
+    debug: true,
     publicRoutes: [
         "/",
         '/events/:id',
