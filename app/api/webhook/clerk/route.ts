@@ -4,6 +4,8 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
 import { clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
+
+import logger from '@/lib/logger'
  
 export async function POST(req: Request) {
  
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
       "svix-signature": svix_signature,
     }) as WebhookEvent
   } catch (err) {
-    console.error('Error verifying webhook:', err);
+    logger.error('Error verifying webhook:', err);
     return new Response('Error occured', {
       status: 400
     })
@@ -52,7 +54,7 @@ export async function POST(req: Request) {
  
 
   // Get the ID and type -> We can trigger our own preferences
-  const { id } = evt.data;
+  //const { id } = evt.data;
   const eventType = evt.type;
  
   if(eventType === 'user.created') {
@@ -87,7 +89,7 @@ export async function POST(req: Request) {
   if (eventType === 'user.updated') {
     const { id, first_name, last_name, username, image_url } = evt.data;
     
-    console.log('User Updated Event Data:', JSON.stringify(evt, null, 2));
+    logger.info('User Updated Event Data:', JSON.stringify(evt, null, 2));
     
     
     const user = {
@@ -105,12 +107,9 @@ export async function POST(req: Request) {
   
   if(eventType === 'user.deleted'){
     const {id} = evt.data;
-    const deletedUser = await deleteUser(id!);
+    const deletedUser = await deleteUser(id);
     return NextResponse.json({message: "User Deleted Successfully!", user:deletedUser});
   }
-
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-  console.log('Webhook body:', body);
  
   return new Response('', { status: 200 })
 }

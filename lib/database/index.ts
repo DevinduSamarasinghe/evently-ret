@@ -1,28 +1,49 @@
-import mongoose from 'mongoose';	
+import mongoose, { Connection } from 'mongoose';
+import logger from '../logger';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-let cached = (global as any).mongoose || { conn: null, promise: null };
+// Global interface for mongoose cache
+interface MongooseCache {
+  conn: Connection | null;
+  promise: Promise<Connection> | null;
+}
 
-export const connectToDatabase = async () => {
-    if (cached.conn) {
-        // If there's already a cached connection, return it
-        return cached.conn;
-    }
+// Add Mongoose to the global type for caching in TypeScript
+let cached: MongooseCache = (global as any).mongoose || { conn: null, promise: null };
 
-    if (!MONGODB_URI) {
-        throw new Error("MongoDB URI is missing");
-    }
+// Save the cached connection globally
+(global as any).mongoose = cached;
 
-    if (!cached.promise) {
-        // Initialize the connection promise only once
-        cached.promise = mongoose.connect(MONGODB_URI, {
-            dbName: 'evently',
-            bufferCommands: false, // Ensure no commands are buffered
-        });
-    }
-
-    // Await the promise and store the connection in the cache
-    cached.conn = await cached.promise;
+export const connectToDatabase = async (): Promise<Connection> => {
+  if (cached.conn) {
+    logger.info('Using cached database connection');
     return cached.conn;
+  }
+
+  if (!MONGODB_URI) {
+    const errorMsg = 'MongoDB URI is missing';
+    logger.error(errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  if (cached.promise == null || cached.promise == undefined) {
+    logger.info('Initializing new database connection');
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      dbName: 'evently',
+      bufferCommands: false, // Ensure no commands are buffered
+    }).then((mongooseInstance) => {
+      return mongooseInstance.connection;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+    logger.info('Successfully connected to the MongoDB database');
+  } catch (err: any) {
+    logger.error(`Database connection failed: ${err.message}`);
+    throw err.message;
+  }
+
+  return cached.conn;
 };
