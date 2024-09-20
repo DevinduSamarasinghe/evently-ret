@@ -27,7 +27,7 @@ export const connectToDatabase = async (): Promise<Connection> => {
     throw new Error(errorMsg);
   }
 
-  if (!cached.promise) {
+  if (cached.promise == null || cached.promise == undefined) {
     logger.info('Initializing new database connection');
     cached.promise = mongoose.connect(MONGODB_URI, {
       dbName: 'evently',
