@@ -2,17 +2,21 @@
 'use server'
 
 import { CreateUserParams, UpdateUserParams } from "@/types/user"
-import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
 import Event from "../database/models/event.model"
 import Order from "../database/models/order.model"
 import { revalidatePath } from "next/cache"
 
+import logger from "../logger"
+
 
 /**
  * functions of the user.actions.ts are used in the route.ts for all the event changes 
  */
+
+
+let errorMsg:string  = '';
 
 export const createUser = async(user:CreateUserParams)=>{
     try{
@@ -22,8 +26,8 @@ export const createUser = async(user:CreateUserParams)=>{
         return JSON.parse(JSON.stringify(newUser));
         
     }catch(error){
-        //custom error handling
-        handleError(error);
+        errorMsg = 'Error creating user';
+        logger.error(`${errorMsg} ${error}`);
     }
 }
 
@@ -32,10 +36,15 @@ export const getUserById = async(userId: string)=>{
         await connectToDatabase();
         const user = await User.findById(userId);
 
-        if(!user) handleError("User not found");
+        if(!user) {
+            errorMsg = 'User not found';
+            logger.error(errorMsg);
+        }
+
         return JSON.parse(JSON.stringify(user));
     }catch(error){
-        handleError(error);
+        errorMsg = 'Error getting user by id';
+        logger.error(`${errorMsg} ${error}`);
     }
 }
 
@@ -47,12 +56,16 @@ export const updateUser = async(userId: string, user:UpdateUserParams)=>{
         //new: true would return the latest changed updatedInformation
         const updatedUser = await User.findOneAndUpdate({clerkId:userId}, user, {new:true});
 
-        if(!updatedUser) handleError("User not found");
+        if(!updatedUser) {
+            errorMsg = 'User not found';
+            logger.error(errorMsg);
+        }
         
         return JSON.parse(JSON.stringify(updatedUser));
 
     }catch(error){
-        handleError(error);
+        errorMsg = 'Error updating user';
+        logger.error(`${errorMsg} ${error}`);
     }
 }
 
@@ -62,7 +75,10 @@ export const deleteUser = async(userId: string) =>{
         await connectToDatabase();
 
         const toBeDeletedUser = await User.findOne({clerkId: userId});
-        if(!toBeDeletedUser) handleError("User not found");
+        if(!toBeDeletedUser) {
+            errorMsg = 'User not found';
+            logger.error(errorMsg);
+        }
 
         //unlink the relationships in Event and Orders
 
@@ -88,6 +104,7 @@ export const deleteUser = async(userId: string) =>{
         return deletedUser ?  JSON.parse(JSON.stringify(deletedUser)) : null;
         
     }catch(error){
-        handleError(error);
+        errorMsg = 'Error deleting user';
+        logger.error(`${errorMsg} ${error}`);
     }
 }
