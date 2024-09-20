@@ -1,20 +1,23 @@
 "use server"
 
 import { CreateEventParams, GetEventParams, GetRelatedEventsByCategoryParams, UpdateEventParams } from "@/types/event"
-import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import Event from "../database/models/event.model"
 import User from "../database/models/user.model"
 import Category from "../database/models/category.model"
-import { IEvent } from "../database/models/event.model"
 import { getCategoryByName } from "./category.actions"
 import { revalidatePath } from "next/cache"
+
+import logger from "../logger"
 
 const populateEvent = (query: any) => {
     return query
       .populate({ path: 'organizer', model: User, select: '_id firstName lastName email' })
       .populate({ path: 'category', model: Category, select: '_id name' })
   }
+
+
+let errorMsg:string = '';
 
 //CREATE
 export const createEvent = async ({ event, userId, path }: CreateEventParams) => {
@@ -24,7 +27,9 @@ export const createEvent = async ({ event, userId, path }: CreateEventParams) =>
             //first find the organizer 
             const organizer = await User.findById(userId);
             if(!organizer){
-                throw new Error("Organizer not found");
+              errorMsg = 'Organizer not found';
+              logger.error(errorMsg);  
+              throw new Error(errorMsg);
             }
 
             const newEvent = new Event({
@@ -35,8 +40,8 @@ export const createEvent = async ({ event, userId, path }: CreateEventParams) =>
             await newEvent.save();
             return JSON.parse(JSON.stringify(newEvent));
         }catch(error){
-            console.log(error);
-            handleError(error);
+            errorMsg = 'Error creating event';
+            logger.error(`${errorMsg}: ${error.message}`);
         }
 }
 
@@ -47,9 +52,12 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
   
       const eventToUpdate = await Event.findById(event._id)
       if (!eventToUpdate || eventToUpdate.organizer.toHexString() !== userId) {
-        throw new Error('Unauthorized or event not found')
+        
+        errorMsg = 'Unauthorized or event not found';
+        logger.error(errorMsg);
+        throw new Error(errorMsg);
       }
-  
+      
       const updatedEvent = await Event.findByIdAndUpdate(
         event._id,
         { ...event, category: event.categoryId },
@@ -57,9 +65,10 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
       )
       revalidatePath(path)
   
-      return JSON.parse(JSON.stringify(updatedEvent))
+      return JSON.parse(JSON.stringify(updatedEvent));
     } catch (error) {
-      handleError(error)
+      errorMsg = 'Error updating event';
+      logger.error(`${errorMsg}: ${error.message}`);
     }
   }
 
@@ -77,12 +86,15 @@ export const getEventById = async(eventId: string) =>{
         const event = await populateEvent(Event.findById(eventId));
         
         if(!event){
-            throw new Error("Event not found");
+            errorMsg = 'Event not found';
+            logger.error(errorMsg);
+            throw new Error(errorMsg);
         }
 
         return JSON.parse(JSON.stringify(event));
     }catch(error){
-        handleError(error);
+        errorMsg = 'Error getting event by id';
+        logger.error(`${errorMsg}: ${error.message}`);
     }
 }
 
@@ -110,7 +122,8 @@ export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUs
   
       return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) }
     } catch (error) {
-      handleError(error)
+      errorMsg = 'Error in getting events by user'
+      logger.error(`${errorMsg}: ${error.message}`)
     }
   }
   
@@ -123,6 +136,7 @@ export const getAllEvents = async({query, limit=6, page,category}:GetEventParams
         
         //regex option says case insensitive so anything we pass insensitively gets a match 
         const titleCondition = query ? {title: {$regex: query, $options:'i'}} : {}
+
         const categoryCondition = category ? await getCategoryByName(category) : null
         const conditions = {
             $and: [titleCondition, categoryCondition ? {category: categoryCondition._id} : {}],
@@ -145,7 +159,8 @@ export const getAllEvents = async({query, limit=6, page,category}:GetEventParams
         }
 
     }catch(error){
-        console.log(error);
+        errorMsg = 'Error in getting all events';
+        logger.error(`${errorMsg}: ${error.message}`);
     }
 }
 
@@ -169,6 +184,7 @@ export const getRelatedEventsByCategory = async({categoryId,eventId,limit=3,page
         return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) }
 
     }catch(error){
-        handleError(error);
+      errorMsg = 'Error in getting related events by category';
+      logger.error(`${errorMsg}: ${error.message}`);
     }
 }   
