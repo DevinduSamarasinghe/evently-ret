@@ -1,19 +1,21 @@
-import {createLogger, transports, format} from 'winston'
+// lib/logger.ts
+import { createLogger, transports, format } from 'winston';
 
 const logger = createLogger({
-    level: 'info',
-    format: format.combine(
-        format.timestamp(),
-        format.printf(({timestamp, level, message})=> {
-            return `${timestamp} ${level}: ${message}`
-        })
-
-    ),
-    transports: [
-        new transports.Console(), // logs in the console
-        new transports.File({filename: 'logs/error.log', level:'error'}), //log errors to file
-        new  transports.File({filename: 'logs/combined.log'}) //log everything to a combined file 
-    ]
+  level: 'info',
+  format: format.combine(
+    format.timestamp(),
+    format.printf(({ level, message, timestamp }) => {
+      return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+    })
+  ),
+  transports: [
+    // Log to the console (Vercel will capture this)
+    new transports.Console(),
+    // Remove file transport for Vercel deployment
+    // new transports.File({ filename: 'logs/error.log', level: 'error' }),
+    // new transports.File({ filename: 'logs/combined.log' }),
+  ],
 });
 
 export default logger;
