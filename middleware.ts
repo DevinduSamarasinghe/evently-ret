@@ -12,6 +12,7 @@ export default authMiddleware({
         '/api/webhook/stripe',
         '/api/uploadthing',
         '/api/server/event',
+        '/api/oauth/fetch-access',	
     ],
 
     //these routes will be ignored by middleware 
