@@ -5,6 +5,7 @@ import { SearchParamsProps } from "@/types/event";
 import { formatDateTime } from "@/lib/utils";
 import Collection from "@/components/shared/Collection";
 import CalendarButton from "@/components/shared/CalendarButton";
+import Link from "next/link";
 
 const EventDetails = async ({ params: { id }, searchParams }: SearchParamsProps) => {
 
@@ -73,7 +74,8 @@ const EventDetails = async ({ params: { id }, searchParams }: SearchParamsProps)
               <div className="flex flex-col gap-2">
                 <p className="p-bold-20 text-grey-600">What You'll Learn:</p>
                 <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
-                <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">{event.url}</p>
+                {/* <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline"> {event.url}</p> */}
+                <Link href={event.url} className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">{event?.url}</Link>
               </div>
             </div>
             
