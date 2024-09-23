@@ -61,3 +61,31 @@ export type GetRelatedEventsByCategoryParams = {
     path: string
   }
 
+
+//Google calendar type 
+
+export interface CreateGoogleCalendarEvent {
+  summary: string, 
+  location: string, 
+  description: string,
+  start: {
+    dateTime: string | Date,
+    timeZone: string
+  },
+  end: {
+    dateTime: string | Date,
+    timeZone: string
+  },
+  attendees?: [
+    {email: string}
+  ],
+  reminders?:{
+    useDefault?: boolean,
+    overrides?: 
+      {
+        method: string,
+        minutes: number
+      }[]
+    
+  }
+}

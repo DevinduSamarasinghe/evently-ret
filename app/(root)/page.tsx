@@ -4,9 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { getAllEvents } from "@/lib/actions/event.actions";
 import Collection from '@/components/shared/Collection';
-import { auth } from '@clerk/nextjs';
-import { getUserById } from '@/lib/actions/user.actions';
-
+import { auth } from "@clerk/nextjs";
+import { getAccessToken } from "@/lib/actions/auth.action";
 
 const Home = async() => {
 
@@ -18,14 +17,13 @@ const Home = async() => {
         limit: 6
     });
 
-    //Below code is to test if I can fetch the data from the user
     // const {sessionClaims} = auth();
-    
-    // if(sessionClaims){
-    //     const user = await getUserById(sessionClaims.userId as string);
-    //     console.log("This is the user:",user);
-    // }
+    // if(sessionClaims) {
+    //     const data = await getAccessToken();
+    //     const googleData = await data.json();
+    //     console.log("Email Addresses are as follows", googleData);
 
+    // }
     return (
         <>
             <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
