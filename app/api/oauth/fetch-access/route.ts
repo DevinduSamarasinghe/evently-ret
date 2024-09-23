@@ -1,10 +1,11 @@
+import logger from '@/lib/logger';
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
-  const { userId } = auth();
-  //console.log("UserID from auth is:", userId);
+export async function GET() { 
 
+  logger.debug('Testing OAuth contact');
+  const { userId } = auth();
 
   if (!userId) {
     return NextResponse.json({ message: 'User not found' });
@@ -20,8 +21,6 @@ export async function GET() {
     // Extract the access token
     const accessToken = clerkResponse[0].token;
 
-    console.log(accessToken);
-
     // Now use the access token to interact with Google APIs
     const googlePeopleUrl = 'https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses';
 
@@ -35,8 +34,6 @@ export async function GET() {
 
     // Handle the response from Google's API
     const googleData = await googleResponse.json();
-
-    //console.log("In the handler I call", googleData);
 
     // Return the response in your app
     return NextResponse.json({ message: googleData });

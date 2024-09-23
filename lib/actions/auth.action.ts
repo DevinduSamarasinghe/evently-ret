@@ -1,11 +1,8 @@
 import { auth, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { CreateGoogleCalendarEvent } from '@/types/event';
 
 export const getAccessToken =async()=> {
   const { userId } = auth();
-  console.log("UserID from auth is:", userId);
-
 
   if (!userId) {
     return NextResponse.json({ message: 'User not found' });

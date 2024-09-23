@@ -4,8 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { getAllEvents } from "@/lib/actions/event.actions";
 import Collection from '@/components/shared/Collection';
-import { auth } from "@clerk/nextjs";
-import { getAccessToken } from "@/lib/actions/auth.action";
 
 const Home = async() => {
 
@@ -17,13 +15,6 @@ const Home = async() => {
         limit: 6
     });
 
-    // const {sessionClaims} = auth();
-    // if(sessionClaims) {
-    //     const data = await getAccessToken();
-    //     const googleData = await data.json();
-    //     console.log("Email Addresses are as follows", googleData);
-
-    // }
     return (
         <>
             <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">

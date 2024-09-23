@@ -1,5 +1,4 @@
 // This will be the middleware handling access 
-
 import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
@@ -9,19 +8,13 @@ export default authMiddleware({
         "/",
         '/events/:id',
         '/api/webhook/clerk',
-        '/api/webhook/stripe',
-        '/api/uploadthing',
-        '/api/server/event',
-        '/api/oauth/fetch-access',	
+        '/api/uploadthing',	
     ],
 
     //these routes will be ignored by middleware 
     ignoredRoutes: [
         '/api/webhook/clerk',
-        '/api/webhook/stripe',
         '/api/uploadthing',
-        '/api/internal/hello',
-        '/api/server/event'
     ]
 })
 
