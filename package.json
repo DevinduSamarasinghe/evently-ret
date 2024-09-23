@@ -27,7 +27,7 @@
     "lucide-react": "^0.299.0",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.3",
-    "next": "14.0.4",
+    "next": "^14.1.1",
     "nodemailer": "^6.9.15",
     "query-string": "^8.1.0",
     "react": "^18",
