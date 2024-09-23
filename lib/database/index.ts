@@ -17,7 +17,7 @@ let cached: MongooseCache = (global as any).mongoose || { conn: null, promise: n
 
 export const connectToDatabase = async (): Promise<Connection> => {
   if (cached.conn) {
-    logger.info('Using cached database connection');
+    //logger.info('Using cached database connection');
     return cached.conn;
   }
 
