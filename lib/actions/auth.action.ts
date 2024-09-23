@@ -44,7 +44,7 @@ export const getAccessToken =async()=> {
 }
 
 //passing any as the object for now
-export const createEventInGoogle = async(event:CreateGoogleCalendarEvent, userId:string):Promise<{data: null | any, status: number, message: string}>=>{
+export const createEventInGoogle = async(event, userId:string):Promise<{data: null | any, status: number, message: string}>=>{
   
   try {
     if(!userId){

@@ -69,23 +69,23 @@ export interface CreateGoogleCalendarEvent {
   location: string, 
   description: string,
   start: {
-    dateTime: string,
+    dateTime: string | Date,
     timeZone: string
   },
   end: {
-    dateTime: string,
+    dateTime: string | Date,
     timeZone: string
   },
   attendees?: [
     {email: string}
   ],
   reminders?:{
-    userDefault: boolean,
-    overrides: [
+    useDefault?: boolean,
+    overrides?: 
       {
         method: string,
         minutes: number
-      }
-    ]
+      }[]
+    
   }
 }

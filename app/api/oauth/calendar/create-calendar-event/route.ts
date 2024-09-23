@@ -9,8 +9,10 @@ export const POST = async (req: NextRequest, res:NextRequest) => {
     try {
         
         const {userId} = auth();
-        const event:any = req.body;
+        const event:any = await req.json();
 
+
+        console.log("This is the event", event);
         if(!userId){
             logger.error('User not found');
             return NextResponse.json({message: 'User not found'});
@@ -29,3 +31,5 @@ export const POST = async (req: NextRequest, res:NextRequest) => {
 
     }
 }
+
+  
