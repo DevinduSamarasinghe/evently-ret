@@ -14,6 +14,7 @@ Self Signed Certificate for SSL -> Tentative
 Selenium -> Madusha
 Report -> Everyone 
 
-
+LTS: dc7b861070f6ffd4ee30304866f5bb2c147fdaa2 COMMIT
+LATEST: HAS NEXTJS14.1.1
 
 
