@@ -10,13 +10,12 @@ import Link from "next/link";
 const EventDetails = async ({ params: { id }, searchParams }: SearchParamsProps) => {
 
     const event = await getEventById(id);
-
     const relatedEvents = await getRelatedEventsByCategory({
       categoryId: event.category._id,
       eventId: event._id,
       page: searchParams.page as string,
     })
-  
+    
     return (
         <>
         <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
