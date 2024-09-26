@@ -12,6 +12,7 @@ export const getAccessToken =async()=> {
   const provider = 'oauth_google';
 
   try {
+
     // Get the Google OAuth access token for the user
     const clerkResponse = await clerkClient.users.getUserOauthAccessToken(userId, provider);
 
