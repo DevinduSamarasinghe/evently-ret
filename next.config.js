@@ -14,10 +14,11 @@ const nextConfig = {
                 source: '/(.*)', // Apply headers to all routes
                 headers: [
                     // {
-                    //     // More relaxed Content-Security-Policy for development
                     //     key: 'Content-Security-Policy',
-                    //     value: "default-src 'self'; script-src 'self' https://example.com; img-src 'self' https://example.com; style-src 'self' https://fonts.googleapis.com;"
-                    // },
+                    //     value: "default-src 'self'; script-src 'self' http://localhost:3000 picked-corgi-72.clerk.accounts.dev; connect-src 'self' picked-corgi-72.clerk.accounts.dev; img-src 'self' https://utfs.io https://img.clerk.com; style-src 'self' 'nonce-your-nonce-value' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; worker-src 'self' blob:;"
+                    // }
+                                                    
+                                                     
                     {
                         key: 'Strict-Transport-Security',
                         value: 'max-age=31536000; includeSubDomains; preload',

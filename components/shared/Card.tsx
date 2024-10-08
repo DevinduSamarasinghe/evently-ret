@@ -25,7 +25,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
       w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md 
       transition-all hover:shadow-lg md:min-h-[438px]'>
       <Link href={`/events/${event?._id}`}
-        style={{ backgroundImage: `url(${event?.imageUrl})` }}
+        // style={ { backgroundImage: `url(${event?.imageUrl})` }}
         className='flex-center flex-grow bg-gray-50 bg-cover bg-center text-grey-500'
       />
 
